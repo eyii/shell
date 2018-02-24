@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE mycat:schema SYSTEM "schema.dtd">
+<mycat:schema xmlns:mycat="http://org.opencloudb/">
+
+    <!-- 定义MyCat的逻辑库 -->
+    <schema name="pcx_schema" checkSQLschema="false" sqlMaxLimit="100" dataNode="pcxNode"></schema>
+
+    <!-- 定义MyCat的数据节点 -->
+    <dataNode name="pcxNode" dataHost="dtHost" database="pcx" />
+
+
+    <!-- 定义数据主机dtHost，连接到MySQL读写分离集群 ,schema中的每一个dataHost中的host属性值必须唯一-->
+    <!-- dataHost实际上配置就是后台的数据库集群，一个datahost代表一个数据库集群 -->
+    <!-- balance="1"，全部的readHost与stand by writeHost参与select语句的负载均衡-->
+    <!-- writeType="0"，所有写操作发送到配置的第一个writeHost，这里就是我们的hostmaster，第一个挂了切到还生存的第二个writeHost-->
+    <dataHost name="dtHost" maxCon="500" minCon="20" balance="1"
+              writeType="0" dbType="mysql" dbDriver="native" switchType="2" slaveThreshold="100">
+        <!--心跳检测 -->
+        <heartbeat>show slave status</heartbeat>
+
+        <!--配置后台数据库的IP地址和端口号，还有账号密码 -->
+        <writeHost host="hostMaster" url="192.168.1.6:3306" user="root" password="root" />
+        <writeHost host="hostSlave" url="192.168.1.7:3306" user="root" password="root" />
+    </dataHost>
+
+
+</mycat:schema>

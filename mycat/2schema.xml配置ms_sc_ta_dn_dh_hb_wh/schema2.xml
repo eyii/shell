@@ -1,0 +1,12 @@
+<!DOCTYPE mycat:schema SYSTEM "schema.dtd">
+<mycat:schema xmlns="http://www.w3.org/2001/XMLSchema">
+    <schema name="shujukuming">
+        <table name="xxxx" dataNode="dn1,dn2" ></table>
+    </schema>
+    <dataNode name="dn1" dataHost="mysql1" database="xxxx"></dataNode>
+    <dataHost name="mysql1">
+        <hearbeat>select user()</hearbeat>
+        <writeHost host="" url="127.0.0.0" user="" password=""></writeHost>
+    </dataHost>
+
+</mycat:schema>

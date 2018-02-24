@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE mycat:schema SYSTEM "schema.dtd">
+<mycat:schema xmlns:mycat="http://io.mycat/">
+
+	<!-- 配置逻辑数据库名字,以及配置需要分片的表，也可以配置字典全局表或者不分片的表，总之你要纳入mycat管理的表就要在此配置 -->
+	<schema name="TESTDB" checkSQLschema="false" sqlMaxLimit="100">
+		<!-- auto sharding by id (long) -->
+		<table name="travelrecord" dataNode="dn1,dn2,dn3" rule="sharding-by-murmur" />
+		<!-- dataNode配置数据节点名字 ，分片规则参照rule.xml -->
+		<table name="t_gaojs" dataNode="dn1,dn2,dn3,dn4" rule="mod-long" />
+	</schema>
+	<!-- 配置数据节点名字以及  数据主机名字和  主机对应的数据库，个人觉得这个database应该配置在dataHost中更合理 -->
+	<dataNode name="dn1" dataHost="localhost1_gaojingsong1" database="db1" />
+	<dataNode name="dn2" dataHost="localhost1_gaojingsong2" database="db2" />
+	<dataNode name="dn3" dataHost="localhost1_gaojingsong3" database="db3" />
+	<dataNode name="dn4" dataHost="localhost1_gaojingsong4" database="db4" />
+	<!-- 配置数据主机参数，数据库 名字以及数据库类型是否需要balance,以及在此配置主机的读写分离-->
+	<dataHost name="localhost1_gaojingsong1" maxCon="1000" minCon="10"
+		balance="0" writeType="0" dbType="mysql" dbDriver="native" slaveThreshold="100">
+		<heartbeat>select now()</heartbeat>
+		<!--can have multi write hosts -->
+		<writeHost host="hostM1" url="10.0.1.36:3306" user="root" password="82868781mulpA">
+			<!-- can have multi read hosts <readHost host="hostS2" url="192.168.1.200:3306" user="root" password="xxx" /> -->
+		</writeHost>
+	</dataHost>
+	<dataHost name="localhost1_gaojingsong2" maxCon="1000" minCon="10"
+		balance="0" writeType="0" dbType="mysql" dbDriver="native" slaveThreshold="100">
+		<heartbeat>select now()</heartbeat>
+		<writeHost host="hostS1" url="10.0.1.36:3306" user="root" password="82868781mulpA" />
+	</dataHost>
+	<dataHost name="localhost1_gaojingsong3" maxCon="1000" minCon="10"
+		balance="0" writeType="0" dbType="mysql" dbDriver="native" slaveThreshold="100">
+		<heartbeat>select now()</heartbeat>
+		<writeHost host="hostM2" url="10.0.1.36:3306" user="root" password="82868781mulpA" />
+	</dataHost>
+	<dataHost name="localhost1_gaojingsong4" maxCon="1000" minCon="10"
+		balance="0" writeType="0" dbType="mysql" dbDriver="native" slaveThreshold="100">
+		<heartbeat>select now()</heartbeat>
+		<writeHost host="hostM2" url="10.0.1.36:3306" user="root" password="82868781mulpA" />
+	</dataHost>
+</mycat:schema>

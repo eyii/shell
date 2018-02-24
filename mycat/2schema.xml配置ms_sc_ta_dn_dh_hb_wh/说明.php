@@ -1,0 +1,1 @@
+mycat:schema schema->table->dataNode->dataHost->hearbeat&&writeHost

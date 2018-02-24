@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE mycat:schema SYSTEM "schema.dtd">
+<mycat:schema xmlns:mycat="http://org.opencloudb/">
+	<schema name="weixin" checkSQLschema="false" sqlMaxLimit="100" dataNode="weixin" />
+	<schema name="yixin" checkSQLschema="false" sqlMaxLimit="100" dataNode="yixin" />
+	<schema name="photo" checkSQLschema="false" sqlMaxLimit="100" dataNode="photo" />
+
+	<dataNode name="weixin" dataHost="testhost" database="db1" />
+	<dataNode name="yixin" dataHost="testhost" database="db2" />
+	<dataNode name="photo" dataHost="testhost" database="db3" />
+
+	<dataHost name="testhost" maxCon="1000" minCon="10" balance="0"
+			  writeType="0" dbType="mysql" dbDriver="native">
+		<heartbeat>select user()</heartbeat>
+		<!-- can have multi write hosts -->
+		<writeHost host="hostM1" url="10.0.1.36:3306" user="root" password="82868781mulpA" />
+		<writeHost host="hostM2" url="10.0.1.36:3306" user="root" password="82868781mulpA" />
+	</dataHost>
+</mycat:schema>
